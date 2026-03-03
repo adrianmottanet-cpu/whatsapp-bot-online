@@ -16,24 +16,6 @@ app.listen(PORT, () => {
 const client = new Client({
     puppeteer: {
         headless: true,
-        executablePath: '/usr/bin/chromium-browser',
         args: [
             '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-gpu',
-            '--single-process'
-        ]
-    }
-});
-
-client.on('qr', (qr) => {
-    console.log('========== QR CODE ==========');
-    qrcode.generate(qr, { small: true });
-});
-
-client.on('ready', () => {
-    console.log('WhatsApp conectado ✅');
-});
-
-client.initialize();
+            '--disable-set
