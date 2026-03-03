@@ -1,12 +1,12 @@
 const express = require('express');
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
 app.get('/', (req, res) => {
-    res.send('Bot WhatsApp Online funcionando 🚀');
+    res.send('Bot rodando 🚀');
 });
 
 app.listen(PORT, () => {
@@ -14,14 +14,26 @@ app.listen(PORT, () => {
 });
 
 const client = new Client({
-    authStrategy: new LocalAuth(),
     puppeteer: {
         headless: true,
+        executablePath: '/usr/bin/chromium-browser',
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
-            '--disable-gpu'
+            '--disable-gpu',
+            '--single-process'
         ]
     }
 });
+
+client.on('qr', (qr) => {
+    console.log('========== QR CODE ==========');
+    qrcode.generate(qr, { small: true });
+});
+
+client.on('ready', () => {
+    console.log('WhatsApp conectado ✅');
+});
+
+client.initialize();
