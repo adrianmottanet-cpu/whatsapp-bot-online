@@ -16,32 +16,12 @@ app.listen(PORT, () => {
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu'
+        ]
     }
 });
-
-client.on('qr', qr => {
-    console.log('Escaneie o QR Code abaixo:');
-    qrcode.generate(qr, { small: true });
-});
-
-client.on('ready', () => {
-    console.log('WhatsApp conectado com sucesso!');
-});
-
-client.on('message', async message => {
-
-    if (message.body.toLowerCase() === 'oi') {
-        message.reply('Olá 👋 Seja bem-vindo!\n\nQuer conhecer nossos planos de internet? Digite:\n1️⃣ Planos\n2️⃣ Falar com atendente');
-    }
-
-    if (message.body === '1') {
-        message.reply('🔥 Plano 400MB por R$89,90\nInstalação grátis!\n\nQuer contratar? Digite SIM');
-    }
-
-    if (message.body.toLowerCase() === 'sim') {
-        message.reply('Perfeito! Me envie seu nome completo e endereço para cadastro 😊');
-    }
-});
-
-client.initialize();
